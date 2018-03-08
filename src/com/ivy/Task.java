@@ -15,4 +15,9 @@ public class Task {
         this.dueDate = dueDate;
         this.isComplete = isComplete;
     }
+
+    @Override
+    public String toString() {
+        return name + " , due " + dueDate;
+    }
 }
