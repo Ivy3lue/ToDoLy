@@ -19,14 +19,14 @@ public interface Mvp {
 
         void showError();
 
-        void printTask(Task task);
-
         String getInput();
 
         void print(String message);
     }
 
     interface Presenter {
+
+        void printTask(Task task);
 
     }
 }

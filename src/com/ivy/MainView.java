@@ -21,28 +21,28 @@ public class MainView implements Mvp.View {
 
     @Override
     public void showWelcomeMenu(int completedTasks, int tasksToComplete) {
-        System.out.println("##############################");
         System.out.println();
-        System.out.println("***Welcome to ToDoLy***");
-        System.out.println("Great job! You have " + completedTasks + " completed tasks!");
-        System.out.println("You have " + tasksToComplete + " tasks to complete");
-        System.out.println("##############################");
-        System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("~~~~~~~~~~~ Welcome to ToDoLy ~~~~~~~~~~~~~");
+        System.out.println("Great job! You have completed " + completedTasks + " tasks!");
+        System.out.println("You have " + tasksToComplete + " tasks left to complete! ");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     @Override
     public void showMenu() {
-        System.out.println("##############################");
         System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Please select one of the following options: ");
-        System.out.println("(1) to show tasks");
+        System.out.println("(1) to show ToDoLy");
         System.out.println("(2) to add new task");
-        System.out.println("(3) to edit task");
-        System.out.println("(4) to remove task");
+        System.out.println("(3) to view, edit or remove task");
+        System.out.println("(4) to remove finished tasks");
+        System.out.println("(5) to see all tasks");
         System.out.println();
-        System.out.println("(9) to exit ToDoLy");
-
-        System.out.println("##############################");
+        System.out.println("(9) to exit");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println();
     }
 
     @Override
@@ -52,12 +52,7 @@ public class MainView implements Mvp.View {
 
     @Override
     public void showTasks(List<Task> tasks) {
-        tasks.forEach(this::printTask);
-    }
-
-    @Override
-    public void printTask(Task task) {
-        System.out.println("Task: " + task.toString());
+        tasks.forEach(task -> presenter.printTask(task));
     }
 
     @Override
@@ -65,15 +60,14 @@ public class MainView implements Mvp.View {
         System.out.println(message);
     }
 
-    //TODO fix entering multiple word input
     @Override
     public String getInput() {
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     @Override
     public void showError() {
-        System.out.println("Please enter valid input: ");
+        System.out.println("Invalid input. Please try again... ");
     }
 
     @Override
