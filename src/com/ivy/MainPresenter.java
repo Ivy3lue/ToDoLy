@@ -27,7 +27,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         super.onAttach(view);
 
         mockData();
-        view.showWelcomeMenu(getCompletedTaskCount(), getUncompletedTaskCount());
+        view.showWelcomeMenu(getCompletedTaskCount(), getUncompletedTaskCount(), getOverdueTasksCount());
 
         while (true) {
             view.showMenu();
@@ -47,14 +47,13 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                     addNewTask();
                     break;
 
-                //edits can be done multiple times until "save and exit" is chosen
                 case "3":
-                    view.print("Please enter name of the task to view");
-                    Task taskToEdit = findTask(view.getInput());
+                    view.print(Messages.ENTER_TASK_NAME);
+                    Task taskToEdit = findTask(view.getUserInput());
                     if (taskToEdit != null) {
                         printTask(taskToEdit);
                     } else {
-                        view.print("Task not found. Please try again... ");
+                        view.print(Messages.TASK_NOT_FOUND);
                         break;
                     }
 
@@ -67,7 +66,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                         view.print("(5) to delete task");
                         view.print("(9) to save and exit");
 
-                        String editChoice = view.getInput();
+                        String editChoice = view.getUserInput();
 
                         if (editChoice.equals("9")) {
                             break;
@@ -75,27 +74,27 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
                         switch (editChoice) {
                             case "1":
-                                view.print("Please enter new task name");
-                                taskToEdit.name = view.getInput();
-                                view.print("Edited name...");
+                                view.print(Messages.ENTER_TASK_NAME);
+                                taskToEdit.name = view.getUserInput();
+                                view.print(Messages.SUCCESS);
                                 break;
 
                             case "2":
-                                view.print("Please enter due date in the following dateFormat: yyyy mm dd");
-                                taskToEdit.dueDate = parseDate(view.getInput());
+                                view.print(Messages.ENTER_TASK_DUE_DATE);
+                                taskToEdit.dueDate = parseDate(view.getUserInput());
                                 if (taskToEdit.dueDate != null) {
-                                    view.print("Edited date..." + taskToEdit.dueDate);
+                                    view.print(Messages.SUCCESS);
                                 }
                                 break;
 
                             case "3":
                                 taskToEdit.isComplete = true;
-                                view.print("Marked finished...");
+                                view.print(Messages.SUCCESS);
                                 break;
 
                             case "4":
                                 taskToEdit.isComplete = false;
-                                view.print("Marked unfinished...");
+                                view.print(Messages.SUCCESS);
                                 break;
 
                             case "5":
@@ -103,7 +102,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                                 break;
 
                             default:
-                                view.showError();
+                                view.print(Messages.ERROR);
                         }
                     }
                     break;
@@ -117,9 +116,8 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                     break;
 
                 default:
-                    view.showError();
+                    view.print(Messages.ERROR);
             }
-
         }
     }
 
@@ -131,6 +129,11 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         return tasks.stream().filter(task -> task.isComplete).collect(Collectors.toList());
     }
 
+    private List<Task> getOverdueTasks() {
+        Date currentDate = new Date();
+        return getUncompletedTasks().stream().filter(task -> task.dueDate != null && task.dueDate.after(currentDate)).collect(Collectors.toList());
+    }
+
     //TODO optimize following two methods without creating new lists
     private int getCompletedTaskCount() {
         return getUncompletedTasks().size();
@@ -140,15 +143,19 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         return getCompletedTasks().size();
     }
 
+    private int getOverdueTasksCount() {
+        return getOverdueTasks().size();
+    }
+
     //status is directly set to unfinished
     private void addNewTask() {
-        view.print("Please enter task name: ");
-        String taskName = view.getInput();
-        view.print("Please enter due date in the following dateFormat: yyyy mm dd");
-        Date taskDate = parseDate(view.getInput());
+        view.print(Messages.ENTER_TASK_NAME);
+        String taskName = view.getUserInput();
+        view.print(Messages.ENTER_TASK_DUE_DATE);
+        Date taskDate = parseDate(view.getUserInput());
         Task addedTask = new Task(taskName, taskDate, false);
         tasks.add(addedTask);
-        view.print("Added:");
+        view.print(Messages.SUCCESS);
         printTask(addedTask);
     }
 
@@ -167,11 +174,16 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         try {
             return dateFormat.parse(dateInput);
         } catch (ParseException e) {
-            view.print("Invalid input. Date not set.");
+            view.print(Messages.ERROR);
             return null;
         }
     }
 
+    /**
+     * Formats date and prints task in a String format. Calls <code>view.print()</code>}
+     *
+     * @param task The task to be printed
+     */
     @Override
     public void printTask(Task task) {
         String status;
@@ -193,12 +205,11 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
      * Adds mock data for developing and testing purposes.
      */
     private void mockData() {
-
-        tasks.add(new Task("first mock task", new Date(), false));
-        tasks.add(new Task("second mock task", new Date(), true));
+        tasks.add(new Task("first mock task", new Date(1524002400000L), false));
+        tasks.add(new Task("second mock task", new Date(1537999200000L), true));
         tasks.add(new Task("third mock task", null, false));
         tasks.add(new Task("fourth mock task", new Date(1528236000000L), false));
-        tasks.add(new Task("fifth mock task", new Date(), true));
-        tasks.add(new Task("sixth mock task", new Date(), true));
+        tasks.add(new Task("fifth mock task", null, true));
+        tasks.add(new Task("sixth mock task", new Date(1523484000000L), false));
     }
 }

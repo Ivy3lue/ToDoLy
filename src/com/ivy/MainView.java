@@ -12,7 +12,7 @@ public class MainView implements Mvp.View {
     private Scanner scanner = new Scanner(System.in);
 
     /**
-     * Creates a {@link MainPresenter} object and provides <code>this view</code> as an argument.
+     * Creates a {@link MainPresenter} object and provides <code>this view</code> as an argument in the <code>onAttach()</code>.
      */
     void start() {
         presenter = new MainPresenter();
@@ -20,12 +20,17 @@ public class MainView implements Mvp.View {
     }
 
     @Override
-    public void showWelcomeMenu(int completedTasks, int tasksToComplete) {
+    public void showWelcomeMenu(int completedTasks, int tasksToComplete, int overdueTasks) {
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("~~~~~~~~~~~ Welcome to ToDoLy ~~~~~~~~~~~~~");
-        System.out.println("Great job! You have completed " + completedTasks + " tasks!");
-        System.out.println("You have " + tasksToComplete + " tasks left to complete! ");
+        System.out.println("~~~~~~~~~~~ Welcome to ToDoLy ~~~~~~~~~~~~~~");
+        System.out.println("Great job! You have " + completedTasks + " completed tasks!");
+        System.out.println("You have " + tasksToComplete + " tasks left to complete. ");
+        if (overdueTasks == 1) {
+            System.out.println("OOPS! You have " + overdueTasks + " task overdue!");
+        } else if (overdueTasks > 1) {
+            System.out.println("OOPS! You have " + overdueTasks + " tasks overdue!");
+        }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
@@ -34,10 +39,10 @@ public class MainView implements Mvp.View {
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Please select one of the following options: ");
-        System.out.println("(1) to show ToDoLy");
-        System.out.println("(2) to add new task");
-        System.out.println("(3) to view, edit or remove task");
-        System.out.println("(4) to remove finished tasks");
+        System.out.println("(1) to show your ToDoLy");
+        System.out.println("(2) to add a new task");
+        System.out.println("(3) to view task");
+        System.out.println("(4) to remove all finished tasks");
         System.out.println("(5) to see all tasks");
         System.out.println();
         System.out.println("(9) to exit");
@@ -58,16 +63,6 @@ public class MainView implements Mvp.View {
     @Override
     public void print(String message) {
         System.out.println(message);
-    }
-
-    @Override
-    public String getInput() {
-        return scanner.nextLine();
-    }
-
-    @Override
-    public void showError() {
-        System.out.println("Invalid input. Please try again... ");
     }
 
     @Override

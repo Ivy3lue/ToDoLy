@@ -20,12 +20,11 @@ or
 - Exit
 
 The *View task menu* has a similar submenu that offers to edit or remove selected task.
-//TODO change when *continue* is added
 Until "exit" is selected, the functional menu will be printed after every executed command.
 
 ## Code
-*ToDoLy* is written in Java. It is based on *#MVP# (Model View Presenter) pattern* represented by *ToDoLy's MVP diagram*
-//TODO fix short link
+*ToDoLy* is written in Java. It is based on *MVP (Model View Presenter) pattern* represented by *ToDoLy's MVP diagram*
+
 ![diagram](https://dl2.pushbulletusercontent.com/HzM73kmB0rFsWDxihtnhlKdilbiNaynx/ToDoLy%27s%20MVP.jpg)
 
 ##### Where

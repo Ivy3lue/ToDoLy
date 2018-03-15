@@ -9,17 +9,13 @@ public interface Mvp {
 
     interface View extends BaseView {
 
-        void showWelcomeMenu(int completedTasks, int tasksToComplete);
+        void showWelcomeMenu(int completedTasks, int tasksToComplete, int overdueTasks);
 
         void showMenu();
 
         String getUserInput();
 
         void showTasks(List<Task> tasks);
-
-        void showError();
-
-        String getInput();
 
         void print(String message);
     }
