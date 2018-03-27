@@ -15,14 +15,12 @@ public interface Mvp {
 
         String getUserInput();
 
-        void showTasks(List<Task> tasks);
+        void showTasks(List<String> tasks);
 
         void print(String message);
     }
 
     interface Presenter {
-
-        void printTask(Task task);
 
     }
 }

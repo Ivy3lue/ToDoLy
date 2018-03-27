@@ -56,8 +56,8 @@ public class MainView implements Mvp.View {
     }
 
     @Override
-    public void showTasks(List<Task> tasks) {
-        tasks.forEach(task -> presenter.printTask(task));
+    public void showTasks(List<String> tasks) {
+        tasks.forEach(task -> print(task));
     }
 
     @Override

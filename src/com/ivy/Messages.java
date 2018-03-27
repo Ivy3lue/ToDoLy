@@ -1,7 +1,7 @@
 package com.ivy;
 
 /**
- * Contains strings used in the *program.
+ * Contains strings used in the program.
  */
 class Messages {
     static final String ENTER_TASK_DUE_DATE = "Please enter due date in the following dateFormat: yyyy mm dd";
@@ -9,4 +9,6 @@ class Messages {
     static final String TASK_NOT_FOUND = "Task not found. Please try again... ";
     static final String ERROR = "Invalid input. Please try again... ";
     static final String SUCCESS = "Success!";
+    static final String DATE_ERROR = "Task saved without a due date. To add date please edit it in the *View Task* menu.";
+    static final String REMOVED = "Task(s) removed...";
 }
