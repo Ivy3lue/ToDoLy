@@ -23,9 +23,9 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
         taskManager.mockData();
 
-        view.showWelcomeMenu(taskManager.getCompletedTaskCount(), taskManager.getUncompletedTaskCount(), taskManager.getOverdueTasksCount());
+        view.showWelcomeMenu(taskManager.getCompletedTasks().size(), taskManager.getUncompletedTasks().size(), taskManager.getOverdueTasks().size());
         view.print("Your ToDoLy: ");
-        taskManager.getAgenda().forEach(task -> view.print(taskToString(task)));
+        taskManager.getUncompletedTasks().forEach(task -> view.print(taskToString(task)));
 
         while (true) {
             view.showMenu();
@@ -38,7 +38,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
             switch (userInput) {
                 case "1":
-                    List tasks = new ArrayList();
+                    List<String> tasks = new ArrayList<>();
                     taskManager.getUncompletedTasks().forEach(task -> tasks.add(taskToString(task)));
                     view.showTasks(tasks);
                     break;
@@ -46,7 +46,8 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                 case "2":
                     String name = getNameInput();
                     Date date = getDateInput();
-                    taskManager.addTask(name, date, false);
+                    Task taskToAdd = new Task(name, date, false);
+                    taskManager.addTask(taskToAdd);
                     view.print(Messages.SUCCESS);
                     break;
 
@@ -115,7 +116,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                     break;
 
                 case "5":
-                    List<Task> sortedTasks = taskManager.getSortedTasks();
+                    List<Task> sortedTasks = taskManager.getTasks();
                     sortedTasks.forEach(task -> view.print(taskToString(task)));
                     break;
 
@@ -127,29 +128,20 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
     private String getNameInput() {
         view.print(Messages.ENTER_TASK_NAME);
-        String taskName = view.getUserInput();
-        return taskName;
+        return view.getUserInput();
     }
 
     private Date getDateInput() {
         view.print(Messages.ENTER_TASK_DUE_DATE);
-        Date taskDate = parseDate(view.getUserInput());
-        return taskDate;
+        return parseDate(view.getUserInput());
     }
 
     private String taskToString(Task task) {
         String status;
         String taskToString;
-        if (task.isComplete) {
-            status = "finished";
-        } else {
-            status = "unfinished";
-        }
-        if (task.dueDate == null) {
-            taskToString = "Task: " + task.name + ", " + status;
-        } else {
-            taskToString = "Task: " + task.name + ", due " + dateFormat.format(task.dueDate) + ", " + status;
-        }
+        status = (task.isComplete) ? ("finished") : ("unfinished");
+        taskToString = (task.dueDate == null) ? ("Task: " + task.name + ", " + status) :
+                ("Task: " + task.name + ", due " + dateFormat.format(task.dueDate) + ", " + status);
         return taskToString;
     }
 

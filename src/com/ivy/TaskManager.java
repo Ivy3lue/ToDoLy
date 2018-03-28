@@ -12,61 +12,93 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Contains all the logic for managing the list of tasks.
+ * Contains logic for managing the To Do list.
  */
 class TaskManager {
 
     private List<Task> tasks = new ArrayList<>();
 
-    List<Task> getUncompletedTasks() {
-        return tasks.stream().filter(task -> !task.isComplete).collect(Collectors.toList());
+    /**
+     * Returns sorted (by date) list of tasks
+     *
+     * @return the list of tasks
+     */
+    public List<Task> getTasks() {
+        return sortByDate(tasks);
     }
 
-    private List<Task> getCompletedTasks() {
-        return tasks
-                .stream()
+    /**
+     * Returns sorted (by date) list of completed tasks
+     *
+     * @return a list of completed tasks
+     */
+    public List<Task> getCompletedTasks() {
+        return sortByDate(tasks.stream()
                 .filter(task -> task.isComplete)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
-    private List<Task> getOverdueTasks() {
+    /**
+     * Returns sorted (by date) list of uncompleted tasks
+     *
+     * @return a list of uncompleted tasks
+     */
+    public List<Task> getUncompletedTasks() {
+        return sortByDate(tasks.stream()
+                .filter(task -> !task.isComplete)
+                .collect(Collectors.toList()));
+    }
+
+    /**
+     * Returns sorted (by date) list of overdue tasks
+     *
+     * @return a list of overdue tasks
+     */
+    public List<Task> getOverdueTasks() {
         Date currentDate = new Date();
-        return getUncompletedTasks()
-                .stream()
+        return sortByDate(getUncompletedTasks().stream()
                 .filter(task -> task.dueDate != null && task.dueDate.after(currentDate))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
-    public List<Task> getAgenda() {
-        return sortByDate(getUncompletedTasks());
+    /**
+     * Adds a task
+     *
+     * @param taskToAdd the task to be added
+     */
+    public void addTask(Task taskToAdd) {
+        tasks.add(taskToAdd);
     }
 
-    public int getCompletedTaskCount() {
-        return getCompletedTasks().size();
-    }
-
-    public int getUncompletedTaskCount() {
-        return getUncompletedTasks().size();
-    }
-
-    int getOverdueTasksCount() {
-        return getOverdueTasks().size();
-    }
-
-
-    public void addTask(String name, Date date, boolean status) {
-        Task task = new Task(name, date, status);
-        tasks.add(task);
-    }
-
+    /**
+     * Searches for a task by its name
+     * @param nameOfSearchedTask the name of the task searched
+     * @return if found returns the task searched, otherwise returns null
+     */
     @Nullable
-    Task findTask(@NotNull String name) {
-        Optional<Task> optionalTask = tasks.stream().filter(task -> task.name.equals(name)).findFirst();
+    public Task findTask(@NotNull String nameOfSearchedTask) {
+        Optional<Task> optionalTask = tasks.stream()
+                .filter(task -> task.name.equals(nameOfSearchedTask))
+                .findFirst();
         try {
             return optionalTask.get();
         } catch (NoSuchElementException e) {
             return null;
         }
+    }
+
+    /**
+     * Removes a task
+     *
+     * @param taskToRemove the task to be removed
+     */
+    public void remove(Task taskToRemove) {
+        tasks.remove(taskToRemove);
+    }
+
+    //TODO archive instead?
+    public void removeAllCompleted() {
+        tasks.removeAll(getCompletedTasks());
     }
 
     /**
@@ -81,26 +113,15 @@ class TaskManager {
         tasks.add(new Task("sixth mock task", new Date(1523484000000L), false));
     }
 
-    public void remove(Task taskToEdit) {
-        tasks.remove(taskToEdit);
-    }
-
-    //TODO archive instead?
-    public void removeAllCompleted() {
-        tasks.removeAll(getCompletedTasks());
-    }
-
-    public List<Task> sortByDate(List<Task> tasks) {
+    private List<Task> sortByDate(List<Task> tasks) {
         List<Task> sortedTasks = tasks.stream()
                 .filter(task -> task.dueDate != null)
                 .sorted(Comparator.comparing(currentTask -> currentTask.dueDate))
                 .collect(Collectors.toList());
-        sortedTasks.addAll(tasks.stream().filter(task -> task.dueDate == null).collect(Collectors.toList()));
+        sortedTasks.addAll(tasks.stream()
+                .filter(task -> task.dueDate == null)
+                .collect(Collectors.toList()));
         return sortedTasks;
-    }
-
-    public List<Task> getSortedTasks() {
-        return sortByDate(tasks);
     }
 
 }
