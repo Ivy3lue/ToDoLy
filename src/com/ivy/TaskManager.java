@@ -57,7 +57,7 @@ class TaskManager {
     public List<Task> getOverdueTasks() {
         Date currentDate = new Date();
         return sortByDate(getUncompletedTasks().stream()
-                .filter(task -> task.dueDate != null && task.dueDate.after(currentDate))
+                .filter(task -> task.dueDate != null && task.dueDate.before(currentDate))
                 .collect(Collectors.toList()));
     }
 
@@ -108,7 +108,7 @@ class TaskManager {
         tasks.add(new Task("first mock task", new Date(1524002400000L), false));
         tasks.add(new Task("second mock task", new Date(1537999200000L), true));
         tasks.add(new Task("third mock task", null, false));
-        tasks.add(new Task("fourth mock task", new Date(1528236000000L), false));
+        tasks.add(new Task("fourth mock task", new Date(1520031600000L), false));
         tasks.add(new Task("fifth mock task", null, true));
         tasks.add(new Task("sixth mock task", new Date(1523484000000L), false));
     }

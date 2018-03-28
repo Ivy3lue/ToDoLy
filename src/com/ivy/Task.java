@@ -1,5 +1,7 @@
 package com.ivy;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.Date;
 
 /**
@@ -10,7 +12,7 @@ public class Task {
     public Date dueDate;
     public boolean isComplete;
 
-    public Task(String name, Date dueDate, boolean isComplete) {
+    public Task(@NotNull String name, Date dueDate, boolean isComplete) {
         this.name = name;
         this.dueDate = dueDate;
         this.isComplete = isComplete;

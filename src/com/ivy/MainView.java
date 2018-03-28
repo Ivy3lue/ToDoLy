@@ -42,9 +42,11 @@ public class MainView implements Mvp.View {
         System.out.println("(1) to show your ToDoLy");
         System.out.println("(2) to add a new task");
         System.out.println("(3) to view task");
+        //todo remove multiple tasks menu
         System.out.println("(4) to remove all finished tasks");
         System.out.println("(5) to see all tasks");
         System.out.println();
+        //todo add saving option that writes to file
         System.out.println("(9) to exit");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println();
