@@ -15,13 +15,16 @@ import java.util.Locale;
 public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Presenter {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
-    private TaskManager taskManager = new TaskManager();
+
+    private PersistenceManager persistenceManager;
+    private TaskManager taskManager;
 
     @Override
     public void onAttach(Mvp.View view) {
         super.onAttach(view);
 
-        taskManager.mockData();
+        persistenceManager = new PersistenceManager("./tasks.json");
+        taskManager = new TaskManager(persistenceManager.readFromFile());
 
         view.showWelcomeMenu(taskManager.getCompletedTasks().size(), taskManager.getUncompletedTasks().size(), taskManager.getOverdueTasks().size());
         view.print("Your ToDoLy: ");
@@ -118,6 +121,10 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                 case "5":
                     List<Task> sortedTasks = taskManager.getTasks();
                     sortedTasks.forEach(task -> view.print(taskToString(task)));
+                    break;
+
+                case "8":
+                    persistenceManager.writeToFile(taskManager.getTasks());
                     break;
 
                 default:

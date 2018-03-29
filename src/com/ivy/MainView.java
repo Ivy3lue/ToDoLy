@@ -46,7 +46,7 @@ public class MainView implements Mvp.View {
         System.out.println("(4) to remove all finished tasks");
         System.out.println("(5) to see all tasks");
         System.out.println();
-        //todo add saving option that writes to file
+        System.out.println("(8) to save changes");
         System.out.println("(9) to exit");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println();
