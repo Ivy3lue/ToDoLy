@@ -2,12 +2,12 @@ package com.ivy.manager;
 
 import com.ivy.model.Task;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -68,11 +68,15 @@ public class TaskManagerTest {
         assertArrayEquals(expected.toArray(), result.toArray());
     }
 
-    //depends on current date
     @Test
     public void getOverdueTasks() {
+        Task task = new Task("overdue task", new Date(1504000400000L), "edited", false);
         List<Task> expected = new ArrayList<>();
-        expected.add(fourthTask);
+        expected.add(task);
+
+        taskManager.removeAll();
+        taskManager.addTask(task);
+
         List<Task> result = taskManager.getOverdueTasks();
         assertArrayEquals(expected.toArray(), result.toArray());
     }
@@ -104,12 +108,6 @@ public class TaskManagerTest {
     }
 
     @Test
-    public void findTaskNull() {
-        Task foundTask = taskManager.findTask(null);
-        assertNull(foundTask);
-    }
-
-    @Test
     public void removeExisting() {
         List<Task> expected = new ArrayList<>();
         expected.add(fourthTask);
@@ -137,16 +135,27 @@ public class TaskManagerTest {
         assert (expected.toArray() == taskManager.getTasks().toArray());
     }
 
-    //TODO test removeAll method instead
-    @Ignore
-    public void removeAllCompleted() {
-        List<Task> expected = new ArrayList<>();
-        expected.add(firstTask);
-        expected.add(thirdTask);
-        expected.add(fourthTask);
-        expected.add(sixthTask);
-        //   taskManager.removeAllCompleted();
-        assert (expected.toArray() == taskManager.getTasks().toArray());
+    @Test
+    public void removeAll() {
+        assert (6 == taskManager.getTasks().size());
+        taskManager.removeAll();
+        assert (0 == taskManager.getTasks().size());
     }
 
+    @Test
+    public void removeAllWithIsCompletePredicate() {
+        assert (6 == taskManager.getTasks().size());
+        Predicate<Task> predicate = task -> task.isComplete;
+        taskManager.removeAll(predicate);
+        assertEquals(4, taskManager.getTasks().size());
+    }
+
+    @Test
+    public void removeAllWithProjectPredicate() {
+        assert (6 == taskManager.getTasks().size());
+        String projectName = "mock";
+        Predicate<Task> predicate = (task -> projectName.equalsIgnoreCase(task.project));
+        taskManager.removeAll(predicate);
+        assertEquals(3, taskManager.getTasks().size());
+    }
 }

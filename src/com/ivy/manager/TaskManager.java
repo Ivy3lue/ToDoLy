@@ -4,6 +4,7 @@ import com.ivy.model.Task;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class TaskManager {
 
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     //temp used by Test class
     public TaskManager() {
