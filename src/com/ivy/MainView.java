@@ -1,6 +1,5 @@
 package com.ivy;
 
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -41,13 +40,13 @@ public class MainView implements Mvp.View {
         System.out.println("Please select one of the following options: ");
         System.out.println("(1) to show your ToDoLy");
         System.out.println("(2) to add a new task");
-        System.out.println("(3) to view task");
+        System.out.println("(3) to view/edit task");
         //todo remove multiple tasks menu
-        System.out.println("(4) to remove all finished tasks");
+        System.out.println("(4) to view/edit multiple tasks");
         System.out.println("(5) to see all tasks");
         System.out.println();
         System.out.println("(8) to save changes");
-        System.out.println("(9) to exit");
+        System.out.println("(9) to exit without saving");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println();
     }
@@ -55,11 +54,6 @@ public class MainView implements Mvp.View {
     @Override
     public String getUserInput() {
         return scanner.nextLine();
-    }
-
-    @Override
-    public void showTasks(List<String> tasks) {
-        tasks.forEach(task -> print(task));
     }
 
     @Override

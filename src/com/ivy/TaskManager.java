@@ -23,7 +23,6 @@ class TaskManager {
 
     public TaskManager(List<Task> tasks) {
         this.tasks = tasks;
-
     }
 
     /**
@@ -31,7 +30,6 @@ class TaskManager {
      *
      * @return the list of tasks
      */
-
     public List<Task> getTasks() {
         return sortByDate(tasks);
     }
@@ -116,14 +114,9 @@ class TaskManager {
         tasks.remove(taskToRemove);
     }
 
-    //TODO archive instead?
-    public void removeAllCompleted() {
-        tasks.removeAll(getCompletedTasks());
+    public void removeAll(List<Task> tasksToRemove) {
+        tasks.removeAll(tasksToRemove);
     }
-
-    /**
-     * Adds mock data for developing and testing purposes.
-     */
 
     private List<Task> sortByDate(List<Task> tasks) {
         List<Task> sortedTasks = tasks.stream()
@@ -134,5 +127,9 @@ class TaskManager {
                 .filter(task -> task.dueDate == null)
                 .collect(Collectors.toList()));
         return sortedTasks;
+    }
+
+    public List<String> listProjects() {
+        return tasks.stream().map(task -> task.project).distinct().collect(Collectors.toList());
     }
 }

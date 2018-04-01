@@ -4,10 +4,10 @@ import com.sun.istack.internal.Nullable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * Contains implementation of the ToDoLy program.
@@ -41,15 +41,15 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
             switch (userInput) {
                 case "1":
-                    List<String> tasks = new ArrayList<>();
-                    taskManager.getUncompletedTasks().forEach(task -> tasks.add(taskToString(task)));
-                    view.showTasks(tasks);
+                    taskManager.getUncompletedTasks().forEach(task -> view.print(taskToString(task)));
                     break;
+
                 //sets status to unfinished
                 case "2":
                     String name = getNameInput();
                     Date date = getDateInput();
-                    Task taskToAdd = new Task(name, date, false);
+                    String project = getNameInput();
+                    Task taskToAdd = new Task(name, date, project, false);
                     taskManager.addTask(taskToAdd);
                     view.print(Messages.SUCCESS);
                     break;
@@ -114,14 +114,81 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                     break;
 
                 case "4":
-                    taskManager.removeAllCompleted();
-                    view.print(Messages.REMOVED);
-                    break;
 
-                case "5":
-                    List<Task> sortedTasks = taskManager.getTasks();
-                    sortedTasks.forEach(task -> view.print(taskToString(task)));
-                    break;
+                    while (true) {
+                        view.print("Press: ");
+                        view.print("(1) to see all tasks");
+                        view.print("(2) to see unfinished tasks");
+                        //todo add submenu
+                        view.print("(3) to list projects");
+                        view.print("(4) to delete finished");
+                        view.print("(5) to delete all tasks");
+                        view.print("(9) to save and go to first menu");
+
+                        String editMultipleChoice = view.getUserInput();
+
+                        if (editMultipleChoice.equals("9")) {
+                            break;
+                        }
+
+                        switch (editMultipleChoice) {
+                            case "1":
+                                taskManager.getTasks()
+                                        .stream()
+                                        .map(this::taskToString)
+                                        .forEach(view::print);
+                                break;
+
+                            case "2":
+                                taskManager.getUncompletedTasks()
+                                        .stream()
+                                        .map(this::taskToString)
+                                        .forEach(view::print);
+                                break;
+
+                            case "3":
+                                taskManager.listProjects().forEach(view::print);
+
+                                while (true) {
+                                    view.print("(1) to list project");
+                                    view.print("(2) to delete project ");
+                                    view.print("(9) to save and go to first menu");
+
+                                    String editProjectChoice = view.getUserInput();
+
+                                    if (editProjectChoice.equals("9")) {
+                                        break;
+                                    }
+
+                                    switch (editProjectChoice) {
+
+                                        case "1":
+                                            String projectName = getNameInput();
+                                            taskManager.getTasks().stream().filter(task -> task.project == projectName).forEach(task -> view.print(task.toString()));
+                                            break;
+
+                                        case "2":
+                                            String projectToDelete = getNameInput();
+                                            List<Task> tasksToRemove = taskManager.getTasks().stream().filter(task -> task.project == projectToDelete).collect(Collectors.toList());
+                                            taskManager.removeAll(tasksToRemove);
+                                            break;
+                                    }
+                                    break;
+                                }
+
+                            case "4":
+                                taskManager.removeAll(taskManager.getCompletedTasks());
+                                view.print(Messages.REMOVED);
+                                break;
+
+                            case "5":
+                                taskManager.removeAll(taskManager.getTasks());
+                                break;
+
+                            default:
+                                view.print(Messages.ERROR);
+                        }
+                    }
 
                 case "8":
                     persistenceManager.writeToFile(taskManager.getTasks());

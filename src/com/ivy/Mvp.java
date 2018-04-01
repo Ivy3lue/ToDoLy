@@ -1,7 +1,5 @@
 package com.ivy;
 
-import java.util.List;
-
 /**
  * Provides contract for implementing {@link View} and {@link Presenter}.
  */
@@ -14,8 +12,6 @@ public interface Mvp {
         void showMenu();
 
         String getUserInput();
-
-        void showTasks(List<String> tasks);
 
         void print(String message);
     }

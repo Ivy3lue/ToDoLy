@@ -46,25 +46,29 @@ public class PersistenceManager {
      * @return a list of tasks read from file
      */
     public List<Task> readFromFile() {
-        List<String> lines = null;
-        try {
-            lines = Files.readAllLines(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return lines.stream().map(line -> gson.fromJson(line, Task.class)).collect(Collectors.toList());
+        //       List<String> lines = null;
+//        try {
+//            lines = Files.readAllLines(path);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return lines.stream().map(line -> gson.fromJson(line, Task.class)).collect(Collectors.toList());
+        return mockData();
     }
 
-
     //TODO remove method
+
+    /**
+     * Adds mock data for developing and testing purposes.
+     */
     public List<Task> mockData() {
         List<Task> mockList = new ArrayList<>();
-        mockList.add(new Task("first mock task", new Date(1524002400000L), false));
-        mockList.add(new Task("second mock task", new Date(1537999200000L), true));
-        mockList.add(new Task("third mock task", null, false));
-        mockList.add(new Task("fourth mock task", new Date(1520031600000L), false));
-        mockList.add(new Task("fifth mock task", null, true));
-        mockList.add(new Task("sixth mock task", new Date(1523484000000L), false));
+        mockList.add(new Task("first mock task", new Date(1524002400000L), null, false));
+        mockList.add(new Task("second mock task", new Date(1537999200000L), "mock", true));
+        mockList.add(new Task("third mock task", null, "mock", false));
+        mockList.add(new Task("fourth mock task", new Date(1520031600000L), "mock", false));
+        mockList.add(new Task("fifth mock task", null, "edited", true));
+        mockList.add(new Task("sixth mock task", new Date(1523484000000L), "edited", false));
         return mockList;
     }
 }
