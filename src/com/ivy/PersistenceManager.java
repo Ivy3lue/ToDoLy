@@ -46,14 +46,15 @@ public class PersistenceManager {
      * @return a list of tasks read from file
      */
     public List<Task> readFromFile() {
-        //       List<String> lines = null;
-//        try {
-//            lines = Files.readAllLines(path);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return lines.stream().map(line -> gson.fromJson(line, Task.class)).collect(Collectors.toList());
-        return mockData();
+        List<String> lines = null;
+        try {
+            lines = Files.readAllLines(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines.stream().map(line -> gson.fromJson(line, Task.class)).collect(Collectors.toList());
+        //   to fill empty list
+        //  return mockData();
     }
 
     //TODO remove method

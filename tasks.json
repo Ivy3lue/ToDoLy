@@ -5,8 +5,8 @@
   "isComplete": false
 }
 {
-  "name": "doly",
-  "dueDate": "Mar 4, 2018 12:00:00 AM",
+  "name": "Finish ToDoLy",
+  "dueDate": "Apr 2, 2018 12:00:00 AM",
   "project": "ToDOLy",
   "isComplete": false
 }
@@ -18,7 +18,18 @@
 }
 {"name":"first mock task","dueDate":"Apr 18, 2018 12:00:00 AM","isComplete":false}
 {
+  "name": "second mock task",
+  "dueDate": "Sep 27, 2018 12:00:00 AM",
+  "project": "mock",
+  "isComplete": true
+}
+{
   "name": "third mock task",
   "project": "mock",
   "isComplete": false
+}
+{
+  "name": "fifth mock task",
+  "project": "edited",
+  "isComplete": true
 }

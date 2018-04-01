@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -71,6 +72,7 @@ class TaskManager {
      *
      * @return a list of overdue tasks
      */
+    @NotNull
     public List<Task> getOverdueTasks() {
         Date currentDate = new Date();
         return sortByDate(getUncompletedTasks().stream()
@@ -96,7 +98,7 @@ class TaskManager {
     @Nullable
     public Task findTask(@NotNull String nameOfSearchedTask) {
         Optional<Task> optionalTask = tasks.stream()
-                .filter(task -> task.name.equals(nameOfSearchedTask))
+                .filter(task -> nameOfSearchedTask.equals(task.name))
                 .findFirst();
         try {
             return optionalTask.get();
@@ -114,8 +116,35 @@ class TaskManager {
         tasks.remove(taskToRemove);
     }
 
-    public void removeAll(List<Task> tasksToRemove) {
+    /**
+     * Removes all tasks
+     */
+    public void removeAll() {
+        tasks.clear();
+    }
+
+    /**
+     * Removes multiple tasks
+     *
+     * @param taskPredicate the predicate to filter tasks for removing
+     */
+    public void removeAll(Predicate<Task> taskPredicate) {
+        List<Task> tasksToRemove = tasks
+                .stream()
+                .filter(taskPredicate)
+                .collect(Collectors.toList());
         tasks.removeAll(tasksToRemove);
+    }
+
+    /**
+     * Returns a list of current projects
+     *
+     * @return list of project names
+     */
+    public List<String> listProjects() {
+        return tasks.stream().map(task -> task.project)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private List<Task> sortByDate(List<Task> tasks) {
@@ -129,7 +158,4 @@ class TaskManager {
         return sortedTasks;
     }
 
-    public List<String> listProjects() {
-        return tasks.stream().map(task -> task.project).distinct().collect(Collectors.toList());
-    }
 }
