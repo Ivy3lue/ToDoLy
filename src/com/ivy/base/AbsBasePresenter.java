@@ -1,4 +1,4 @@
-package com.ivy;
+package com.ivy.base;
 
 /**
  * Gives all {@link BasePresenter} subclasses a specific implementation of <code>BasePresenter interface</code> methods.

@@ -1,4 +1,4 @@
-package com.ivy;
+package com.ivy.base;
 
 /**
  * @param <T> generic type for any subclass of {@link BaseView}.

@@ -1,5 +1,7 @@
 package com.ivy;
 
+import com.ivy.base.BaseView;
+
 /**
  * Provides contract for implementing {@link View} and {@link Presenter}.
  */

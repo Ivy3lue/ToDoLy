@@ -1,4 +1,4 @@
-package com.ivy;
+package com.ivy.base;
 
 
 public interface BaseView {

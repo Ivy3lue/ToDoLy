@@ -1,4 +1,4 @@
-package com.ivy;
+package com.ivy.model;
 
 import com.sun.istack.internal.NotNull;
 

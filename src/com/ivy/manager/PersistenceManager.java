@@ -1,7 +1,8 @@
-package com.ivy;
+package com.ivy.manager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ivy.model.Task;
 
 import java.io.FileReader;
 import java.io.FileWriter;

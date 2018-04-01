@@ -1,5 +1,6 @@
-package com.ivy;
+package com.ivy.manager;
 
+import com.ivy.model.Task;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

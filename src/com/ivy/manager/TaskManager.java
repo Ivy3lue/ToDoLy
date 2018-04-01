@@ -1,5 +1,6 @@
-package com.ivy;
+package com.ivy.manager;
 
+import com.ivy.model.Task;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Contains logic for managing the To Do list.
  */
-class TaskManager {
+public class TaskManager {
 
     private List<Task> tasks;
 
