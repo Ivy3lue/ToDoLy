@@ -33,8 +33,11 @@ public class MainView implements Mvp.View {
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
+    /**
+     * Prints main menu of the program
+     */
     @Override
-    public void showMenu() {
+    public void showMainMenu() {
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Please select one of the following options: ");
@@ -49,6 +52,43 @@ public class MainView implements Mvp.View {
         System.out.println();
     }
 
+    /**
+     * Prints menu for a selected task
+     */
+    @Override
+    public void showEditTaskMenu() {
+        System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Press: ");
+        System.out.println("(1) to edit task name");
+        System.out.println("(2) to edit date");
+        System.out.println("(3) to mark task finished");
+        System.out.println("(4) to mark task unfinished");
+        System.out.println("(5) to delete task");
+        System.out.println();
+        System.out.println("(9) to save and exit");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println();
+    }
+
+    /**
+     * Prints menu for multiple tasks
+     */
+    @Override
+    public void showEditMultipleMenu() {
+        System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Press: ");
+        System.out.println("(1) to see all tasks");
+        System.out.println("(2) to see unfinished tasks");
+        System.out.println("(3) to list projects");
+        System.out.println("(4) to delete finished");
+        System.out.println("(5) to delete all tasks");
+        System.out.println("(9) to save and exit");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println();
+    }
+
     @Override
     public String getUserInput() {
         return scanner.nextLine();
@@ -59,6 +99,9 @@ public class MainView implements Mvp.View {
         System.out.println(message);
     }
 
+    /**
+     * Detaches <code>this view</code> from the {@Link MainPresenter}
+     */
     @Override
     public void exit() {
         presenter.onDetach();

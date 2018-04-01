@@ -9,11 +9,15 @@ public interface Mvp {
 
         void showWelcomeMenu(int completedTasks, int tasksToComplete, int overdueTasks);
 
-        void showMenu();
+        void showMainMenu();
 
         String getUserInput();
 
         void print(String message);
+
+        void showEditTaskMenu();
+
+        void showEditMultipleMenu();
     }
 
     interface Presenter {

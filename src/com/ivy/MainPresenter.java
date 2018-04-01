@@ -27,12 +27,11 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
         view.showWelcomeMenu(taskManager.getCompletedTasks().size(), taskManager.getUncompletedTasks().size(), taskManager.getOverdueTasks().size());
 
-        //TODO daily angenda
+        //TODO daily agenda
         //view.print("Today's ToDoLy: ");
-        //taskManager.getUncompletedTasks().stream().filter(task -> LocalDate.now().compareTo(new LocalDate(task.dueDate)) == task.dueDate).forEach(task -> view.print(taskToString(task)));
 
         while (true) {
-            view.showMenu();
+            view.showMainMenu();
             String userInput = view.getUserInput();
 
             if ("9".equals(userInput)) {
@@ -67,13 +66,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                     }
 
                     while (true) {
-                        view.print("Press: ");
-                        view.print("(1) to edit task name");
-                        view.print("(2) to edit date");
-                        view.print("(3) to mark task finished");
-                        view.print("(4) to mark task unfinished");
-                        view.print("(5) to delete task");
-                        view.print("(9) to save and exit");
+                        view.showEditTaskMenu();
 
                         String editChoice = view.getUserInput();
 
@@ -118,13 +111,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                 case "4":
 
                     while (true) {
-                        view.print("Press: ");
-                        view.print("(1) to see all tasks");
-                        view.print("(2) to see unfinished tasks");
-                        view.print("(3) to list projects");
-                        view.print("(4) to delete finished");
-                        view.print("(5) to delete all tasks");
-                        view.print("(9) to save and go to first menu");
+                        view.showEditMultipleMenu();
 
                         String editMultipleChoice = view.getUserInput();
 
@@ -169,7 +156,8 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                                             taskManager.getTasks()
                                                     .stream()
                                                     .filter(task -> projectName.equalsIgnoreCase(task.project))
-                                                    .forEach(task -> view.print(task.toString()));
+                                                    .map(this::taskToString)
+                                                    .forEach(view::print);
                                             break;
 
                                         case "2":
