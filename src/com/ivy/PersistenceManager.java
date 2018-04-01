@@ -1,22 +1,22 @@
 package com.ivy;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Reads and writes data to file
  */
 public class PersistenceManager {
 
-    private Path path;
+    private String path;
     private Gson gson;
 
     /**
@@ -25,17 +25,19 @@ public class PersistenceManager {
      * @param path the path to the file that the PersistenceManager will work with
      */
     public PersistenceManager(String path) {
-        this.path = Paths.get(path);
+        this.path = path;
         gson = new Gson();
     }
 
     /**
      * Writes to file
+     *
      * @param list the list of tasks to be written to file
      */
     public void writeToFile(List<Task> list) {
-        try {
-            Files.write(path, list.stream().map(gson::toJson).collect(Collectors.toList()));
+        try (Writer writer = new FileWriter(path)) {
+            gson.toJson(list, new TypeToken<List<Task>>() {
+            }.getType(), writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,21 +45,20 @@ public class PersistenceManager {
 
     /**
      * Reads from file
+     *
      * @return a list of tasks read from file
      */
     public List<Task> readFromFile() {
-        List<String> lines = null;
-        try {
-            lines = Files.readAllLines(path);
+        List<Task> tasks = new ArrayList<>();
+        try (FileReader reader = new FileReader(path)) {
+            tasks = gson.fromJson(reader, new TypeToken<List<Task>>() {
+            }.getType());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lines.stream().map(line -> gson.fromJson(line, Task.class)).collect(Collectors.toList());
-        //   to fill empty list
-        //  return mockData();
+        return tasks;
     }
 
-    //TODO remove method
 
     /**
      * Adds mock data for developing and testing purposes.
