@@ -44,13 +44,10 @@ public class TaskManager {
      */
 
     public List<Task> getCompletedTasks() {
-       List<Task> completedTasks = tasks.stream()
+        List<Task> completedTasks = tasks.stream()
                 .filter(task -> task.isComplete)
                 .collect(Collectors.toList());
-       if (completedTasks.isEmpty()) {
-           return completedTasks;
-       } else
-           return sortByDate(completedTasks);
+        return sortByDate(completedTasks);
     }
 
     /**
@@ -63,10 +60,7 @@ public class TaskManager {
         List<Task> uncompletedTasks = tasks.stream()
                 .filter(task -> !task.isComplete)
                 .collect(Collectors.toList());
-        if (uncompletedTasks.isEmpty()) {
-            return uncompletedTasks;
-        } else
-            return sortByDate(uncompletedTasks);
+        return sortByDate(uncompletedTasks);
     }
 
     /**
@@ -77,9 +71,11 @@ public class TaskManager {
     @NotNull
     public List<Task> getOverdueTasks() {
         Date currentDate = new Date();
-        return sortByDate(getUncompletedTasks().stream()
+        List<Task> overdueTasks = getUncompletedTasks()
+                .stream()
                 .filter(task -> task.dueDate != null && task.dueDate.before(currentDate))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+        return sortByDate(overdueTasks);
     }
 
     /**
@@ -121,8 +117,12 @@ public class TaskManager {
     /**
      * Removes all tasks
      */
-    public void removeAll() {
+    public boolean removeAll() {
+        if (tasks.isEmpty()) {
+            return false;
+        }
         tasks.clear();
+        return true;
     }
 
     /**
@@ -130,12 +130,16 @@ public class TaskManager {
      *
      * @param taskPredicate the predicate to filter tasks for removing
      */
-    public void removeAll(Predicate<Task> taskPredicate) {
+    public boolean removeAll(Predicate<Task> taskPredicate) {
         List<Task> tasksToRemove = tasks
                 .stream()
                 .filter(taskPredicate)
                 .collect(Collectors.toList());
+        if (tasksToRemove.isEmpty()) {
+            return false;
+        }
         tasks.removeAll(tasksToRemove);
+        return true;
     }
 
     /**
@@ -144,12 +148,16 @@ public class TaskManager {
      * @return list of project names
      */
     public List<String> listProjects() {
-        return tasks.stream().map(task -> task.project)
+        return tasks.stream()
+                .map(task -> task.project)
                 .distinct()
                 .collect(Collectors.toList());
     }
 
     private List<Task> sortByDate(List<Task> tasks) {
+        if (tasks.isEmpty()) {
+            return tasks;
+        }
         List<Task> sortedTasks = tasks.stream()
                 .filter(task -> task.dueDate != null)
                 .sorted(Comparator.comparing(currentTask -> currentTask.dueDate))

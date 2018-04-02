@@ -11,11 +11,13 @@ import java.util.function.Predicate;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class TaskManagerTest {
 
-    TaskManager taskManager;
+    private TaskManager taskManager;
 
     private Task firstTask = new Task("first mock task", new Date(1524002400000L), null, false);
     private Task secondTask = new Task("second mock task", new Date(1537999200000L), "mock", true);
@@ -46,6 +48,13 @@ public class TaskManagerTest {
         expected.add(fifthTask);
         List<Task> result = taskManager.getTasks();
         assertArrayEquals(expected.toArray(), result.toArray());
+    }
+
+    @Test
+    public void getTasksWhenEmpty() {
+        taskManager.removeAll();
+        List<Task> result = taskManager.getTasks();
+        assertArrayEquals(new ArrayList<>().toArray(), result.toArray());
     }
 
     @Test
@@ -140,6 +149,13 @@ public class TaskManagerTest {
         assert (6 == taskManager.getTasks().size());
         taskManager.removeAll();
         assert (0 == taskManager.getTasks().size());
+    }
+
+    @Test
+    public void removeAllWhenEmpty() {
+        assertTrue(taskManager.removeAll());
+        taskManager.removeAll();
+        assertFalse(taskManager.removeAll());
     }
 
     @Test

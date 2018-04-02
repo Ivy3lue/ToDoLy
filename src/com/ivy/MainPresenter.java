@@ -10,8 +10,10 @@ import com.sun.istack.internal.Nullable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Contains implementation of the ToDoLy program.
@@ -20,14 +22,13 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
 
-    private PersistenceManager persistenceManager;
     private TaskManager taskManager;
 
     @Override
     public void onAttach(Mvp.View view) {
         super.onAttach(view);
 
-        persistenceManager = new PersistenceManager("./tasks.json");
+        PersistenceManager persistenceManager = new PersistenceManager("./tasks.json");
         taskManager = new TaskManager(persistenceManager.readFromFile());
 
         view.showWelcomeMenu(taskManager.getCompletedTasks().size(), taskManager.getUncompletedTasks().size(), taskManager.getOverdueTasks().size());
@@ -39,22 +40,22 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
             view.showMainMenu();
             String userInput = view.getUserInput();
 
-            if ("9".equals(userInput)) {
+            if (userInput.equals("9")) {
                 view.exit();
                 return;
             }
 
             switch (userInput) {
                 case "1":
-                    taskManager.getUncompletedTasks()
-                            .forEach(task -> view.print(taskToString(task)));
+                    List<Task> uncompletedTasks = taskManager.getUncompletedTasks();
+                    printList(uncompletedTasks);
                     break;
 
                 //sets status to unfinished
                 case "2":
                     String name = getNameInput();
                     Date date = getDateInput();
-                    String project = getProjectName();
+                    String project = getProjectNameInput();
                     Task taskToAdd = new Task(name, date, project, false);
                     taskManager.addTask(taskToAdd);
                     view.print(Messages.SUCCESS);
@@ -109,11 +110,11 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                     task.dueDate = getDateInput();
                     if (task.dueDate != null) {
                         view.print(Messages.SUCCESS);
-                    }
+                    } else view.print(Messages.DATE_ERROR);
                     break;
 
                 case "3":
-                    task.project = getProjectName();
+                    task.project = getProjectNameInput();
                     view.print(Messages.SUCCESS);
                     break;
 
@@ -150,34 +151,40 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
             switch (editMultipleChoice) {
                 case "1":
-                    taskManager.getTasks()
-                            .stream()
-                            .map(this::taskToString)
-                            .forEach(view::print);
+                    List<Task> taskList = taskManager.getTasks();
+                    printList(taskList);
                     break;
 
                 case "2":
-                    taskManager.getUncompletedTasks()
-                            .stream()
-                            .map(this::taskToString)
-                            .forEach(view::print);
+                    List<Task> uncompletedTaskList = taskManager.getUncompletedTasks();
+                    printList(uncompletedTaskList);
                     break;
 
                 case "3":
-                    taskManager.listProjects()
-                            .forEach(view::print);
-
-                    switchProjectMenu();
+                    List<String> projects = taskManager.listProjects();
+                    if (!projects.isEmpty()) {
+                        projects.forEach(view::print);
+                        switchProjectMenu();
+                    } else
+                        view.print(Messages.LIST_IS_EMPTY);
                     break;
 
                 case "4":
-                    taskManager.removeAll(task -> task.isComplete);
-                    view.print(Messages.REMOVED);
+                    if (taskManager.removeAll(task -> task.isComplete)) {
+                        view.print(Messages.REMOVED);
+                        break;
+                    } else
+                        view.print(Messages.ERROR_REMOVING);
                     break;
 
                 case "5":
-                    taskManager.removeAll();
-                    break;
+                    if (taskManager.removeAll()) {
+                        view.print(Messages.REMOVED);
+                        break;
+                    } else {
+                        view.print(Messages.ERROR_REMOVING);
+                        break;
+                    }
 
                 default:
                     view.print(Messages.ERROR);
@@ -198,21 +205,20 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
             switch (editProjectChoice) {
 
                 case "1":
-                    String projectName = getProjectName();
-                    taskManager.getTasks()
+                    String projectName = getProjectNameInput();
+                    List<Task> tasksInProject = taskManager.getTasks()
                             .stream()
                             .filter(task -> projectName.equalsIgnoreCase(task.project))
-                            .map(this::taskToString)
-                            .forEach(view::print);
+                            .collect(Collectors.toList());
+                    printList(tasksInProject);
                     break;
 
                 case "2":
-                    String projectToDelete = getProjectName();
-                    Predicate<Task> taskPredicate = task -> task.project.equalsIgnoreCase(projectToDelete);
+                    String projectToDelete = getProjectNameInput();
+                    Predicate<Task> taskPredicate = task -> projectToDelete.equalsIgnoreCase(task.project);
                     taskManager.removeAll(taskPredicate);
                     break;
             }
-            break;
         }
     }
 
@@ -221,7 +227,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         return view.getUserInput();
     }
 
-    private String getProjectName() {
+    private String getProjectNameInput() {
         view.print(Messages.ENTER_PROJECT_NAME);
         return view.getUserInput();
     }
@@ -240,6 +246,16 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         taskToString = (task.dueDate == null) ? ("Project: " + project + ", Task: " + task.name + ", " + status) :
                 ("Project: " + project + ", Task: " + task.name + ", due " + dateFormat.format(task.dueDate) + ", " + status);
         return taskToString;
+    }
+
+    private void printList(List<Task> taskList) {
+        if (taskList.isEmpty()) {
+            view.print(Messages.LIST_IS_EMPTY);
+        } else {
+            taskList.stream()
+                    .map(this::taskToString)
+                    .forEach(view::print);
+        }
     }
 
     @Nullable
