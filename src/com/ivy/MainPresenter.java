@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Presenter {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MM dd", Locale.ENGLISH);
 
     private TaskManager taskManager;
 

@@ -19,12 +19,12 @@ public class TaskManagerTest {
 
     private TaskManager taskManager;
 
-    private Task firstTask = new Task("first mock task", new Date(1524002400000L), null, false);
-    private Task secondTask = new Task("second mock task", new Date(1537999200000L), "mock", true);
-    private Task thirdTask = new Task("third mock task", null, "mock", false);
-    private Task fourthTask = new Task("fourth mock task", new Date(1520031600000L), "mock", false);
-    private Task fifthTask = new Task("fifth mock task", null, "edited", true);
-    private Task sixthTask = new Task("sixth mock task", new Date(1523484000000L), "edited", false);
+    private final Task firstTask = new Task("first mock task", new Date(1524002400000L), null, false);
+    private final Task secondTask = new Task("second mock task", new Date(1537999200000L), "mock", true);
+    private final Task thirdTask = new Task("third mock task", null, "mock", false);
+    private final Task fourthTask = new Task("fourth mock task", new Date(1520031600000L), "mock", false);
+    private final Task fifthTask = new Task("fifth mock task", null, "edited", true);
+    private final Task sixthTask = new Task("sixth mock task", new Date(1523484000000L), "edited", false);
 
     @Before
     public void SetUp() {

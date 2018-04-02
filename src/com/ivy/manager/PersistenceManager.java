@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class PersistenceManager {
 
-    private String path;
-    private Gson gson;
+    private final String path;
+    private final Gson gson;
 
     /**
      * Constructor

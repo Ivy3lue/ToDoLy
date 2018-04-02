@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class MainView implements Mvp.View {
 
     private MainPresenter presenter;
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     /**
      * Creates a {@link MainPresenter} object and provides <code>this view</code> as an argument in the <code>onAttach()</code>.
@@ -118,7 +118,7 @@ public class MainView implements Mvp.View {
     }
 
     /**
-     * Detaches <code>this view</code> from the {@Link MainPresenter}
+     * Detaches <code>this view</code> from the {@link MainPresenter}
      */
     @Override
     public void exit() {
