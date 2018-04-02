@@ -63,6 +63,7 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                 case "3":
                     view.print(Messages.ENTER_TASK_NAME);
                     Task taskToEdit = taskManager.findTask(view.getUserInput());
+
                     if (taskToEdit != null) {
                         taskToString(taskToEdit);
                     } else {
@@ -70,124 +71,11 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                         break;
                     }
 
-                    while (true) {
-                        view.showEditTaskMenu();
-
-                        String editChoice = view.getUserInput();
-
-                        if (editChoice.equals("9")) {
-                            break;
-                        }
-
-                        switch (editChoice) {
-                            case "1":
-                                taskToEdit.name = getNameInput();
-                                view.print(Messages.SUCCESS);
-                                break;
-
-                            case "2":
-                                taskToEdit.dueDate = getDateInput();
-                                if (taskToEdit.dueDate != null) {
-                                    view.print(Messages.SUCCESS);
-                                }
-                                break;
-
-                            case "3":
-                                taskToEdit.isComplete = true;
-                                view.print(Messages.SUCCESS);
-                                break;
-
-                            case "4":
-                                taskToEdit.isComplete = false;
-                                view.print(Messages.SUCCESS);
-                                break;
-
-                            case "5":
-                                taskManager.remove(taskToEdit);
-                                view.print(Messages.REMOVED);
-                                break;
-
-                            default:
-                                view.print(Messages.ERROR);
-                        }
-                    }
+                    switchEditTaskMenu(taskToEdit);
                     break;
 
                 case "4":
-
-                    while (true) {
-                        view.showEditMultipleMenu();
-
-                        String editMultipleChoice = view.getUserInput();
-
-                        if (editMultipleChoice.equals("9")) {
-                            break;
-                        }
-
-                        switch (editMultipleChoice) {
-                            case "1":
-                                taskManager.getTasks()
-                                        .stream()
-                                        .map(this::taskToString)
-                                        .forEach(view::print);
-                                break;
-
-                            case "2":
-                                taskManager.getUncompletedTasks()
-                                        .stream()
-                                        .map(this::taskToString)
-                                        .forEach(view::print);
-                                break;
-
-                            case "3":
-                                taskManager.listProjects()
-                                        .forEach(view::print);
-
-                                while (true) {
-                                    view.print("(1) to list project");
-                                    view.print("(2) to delete project ");
-                                    view.print("(9) to save and go to first menu");
-
-                                    String editProjectChoice = view.getUserInput();
-
-                                    if (editProjectChoice.equals("9")) {
-                                        break;
-                                    }
-
-                                    switch (editProjectChoice) {
-
-                                        case "1":
-                                            String projectName = getProjectName();
-                                            taskManager.getTasks()
-                                                    .stream()
-                                                    .filter(task -> projectName.equalsIgnoreCase(task.project))
-                                                    .map(this::taskToString)
-                                                    .forEach(view::print);
-                                            break;
-
-                                        case "2":
-                                            String projectToDelete = getProjectName();
-                                            Predicate<Task> taskPredicate = task -> task.project.equalsIgnoreCase(projectToDelete);
-                                            taskManager.removeAll(taskPredicate);
-                                            break;
-                                    }
-                                    break;
-                                }
-
-                                break;
-                            case "4":
-                                taskManager.removeAll(task -> task.isComplete);
-                                view.print(Messages.REMOVED);
-                                break;
-
-                            case "5":
-                                taskManager.removeAll();
-                                break;
-
-                            default:
-                                view.print(Messages.ERROR);
-                        }
-                    }
+                    switchEditMultipleMenu();
                     break;
 
                 case "8":
@@ -198,6 +86,133 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
                 default:
                     view.print(Messages.ERROR);
             }
+        }
+    }
+
+    private void switchEditTaskMenu(Task task) {
+
+        while (true) {
+            view.showEditTaskMenu();
+            String editChoice = view.getUserInput();
+
+            if (editChoice.equals("9")) {
+                break;
+            }
+
+            switch (editChoice) {
+                case "1":
+                    task.name = getNameInput();
+                    view.print(Messages.SUCCESS);
+                    break;
+
+                case "2":
+                    task.dueDate = getDateInput();
+                    if (task.dueDate != null) {
+                        view.print(Messages.SUCCESS);
+                    }
+                    break;
+
+                case "3":
+                    task.project = getProjectName();
+                    view.print(Messages.SUCCESS);
+                    break;
+
+                case "4":
+                    task.isComplete = true;
+                    view.print(Messages.SUCCESS);
+                    break;
+
+                case "5":
+                    task.isComplete = false;
+                    view.print(Messages.SUCCESS);
+                    break;
+
+                case "6":
+                    taskManager.remove(task);
+                    view.print(Messages.REMOVED);
+                    break;
+
+                default:
+                    view.print(Messages.ERROR);
+            }
+        }
+    }
+
+    private void switchEditMultipleMenu() {
+        while (true) {
+            view.showEditMultipleMenu();
+
+            String editMultipleChoice = view.getUserInput();
+
+            if (editMultipleChoice.equals("9")) {
+                break;
+            }
+
+            switch (editMultipleChoice) {
+                case "1":
+                    taskManager.getTasks()
+                            .stream()
+                            .map(this::taskToString)
+                            .forEach(view::print);
+                    break;
+
+                case "2":
+                    taskManager.getUncompletedTasks()
+                            .stream()
+                            .map(this::taskToString)
+                            .forEach(view::print);
+                    break;
+
+                case "3":
+                    taskManager.listProjects()
+                            .forEach(view::print);
+
+                    switchProjectMenu();
+                    break;
+
+                case "4":
+                    taskManager.removeAll(task -> task.isComplete);
+                    view.print(Messages.REMOVED);
+                    break;
+
+                case "5":
+                    taskManager.removeAll();
+                    break;
+
+                default:
+                    view.print(Messages.ERROR);
+            }
+        }
+    }
+
+    private void switchProjectMenu() {
+        while (true) {
+            view.showProjectMenu();
+
+            String editProjectChoice = view.getUserInput();
+
+            if (editProjectChoice.equals("9")) {
+                break;
+            }
+
+            switch (editProjectChoice) {
+
+                case "1":
+                    String projectName = getProjectName();
+                    taskManager.getTasks()
+                            .stream()
+                            .filter(task -> projectName.equalsIgnoreCase(task.project))
+                            .map(this::taskToString)
+                            .forEach(view::print);
+                    break;
+
+                case "2":
+                    String projectToDelete = getProjectName();
+                    Predicate<Task> taskPredicate = task -> task.project.equalsIgnoreCase(projectToDelete);
+                    taskManager.removeAll(taskPredicate);
+                    break;
+            }
+            break;
         }
     }
 

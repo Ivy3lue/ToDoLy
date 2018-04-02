@@ -20,6 +20,8 @@ public interface Mvp {
         void showEditTaskMenu();
 
         void showEditMultipleMenu();
+
+        void showProjectMenu();
     }
 
     interface Presenter {

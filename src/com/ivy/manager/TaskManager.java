@@ -20,7 +20,7 @@ public class TaskManager {
 
     private List<Task> tasks = new ArrayList<>();
 
-    //temp used by Test class
+    // used by Test class
     public TaskManager() {
     }
 

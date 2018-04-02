@@ -46,8 +46,8 @@ public class MainView implements Mvp.View {
         System.out.println("(3) to view/edit task");
         System.out.println("(4) to view/edit multiple tasks");
         System.out.println();
-        System.out.println("(8) to save changes");
-        System.out.println("(9) to exit without saving");
+        System.out.println("(8) to save all changes");
+        System.out.println("(9) to exit program without saving");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println();
     }
@@ -59,14 +59,15 @@ public class MainView implements Mvp.View {
     public void showEditTaskMenu() {
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("Press: ");
+        System.out.println("Please select one of the following options: ");
         System.out.println("(1) to edit task name");
         System.out.println("(2) to edit date");
-        System.out.println("(3) to mark task finished");
-        System.out.println("(4) to mark task unfinished");
-        System.out.println("(5) to delete task");
+        System.out.println("(3) to edit project");
+        System.out.println("(4) to mark task finished");
+        System.out.println("(5) to mark task unfinished");
+        System.out.println("(6) to delete task");
         System.out.println();
-        System.out.println("(9) to save and exit");
+        System.out.println("(9) to exit this menu");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println();
     }
@@ -78,13 +79,30 @@ public class MainView implements Mvp.View {
     public void showEditMultipleMenu() {
         System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("Press: ");
+        System.out.println("Please select one of the following options: ");
         System.out.println("(1) to see all tasks");
         System.out.println("(2) to see unfinished tasks");
         System.out.println("(3) to list projects");
         System.out.println("(4) to delete finished");
         System.out.println("(5) to delete all tasks");
-        System.out.println("(9) to save and exit");
+        System.out.println();
+        System.out.println("(9) to exit this menu");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println();
+    }
+
+    /**
+     * Prints projects menu
+     */
+    @Override
+    public void showProjectMenu() {
+        System.out.println();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Please select one of the following options: ");
+        System.out.println("(1) to list project");
+        System.out.println("(2) to delete project ");
+        System.out.println();
+        System.out.println("(9) to exit this menu");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println();
     }
