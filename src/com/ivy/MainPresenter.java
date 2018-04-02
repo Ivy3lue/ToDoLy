@@ -4,6 +4,7 @@ import com.ivy.base.AbsBasePresenter;
 import com.ivy.manager.PersistenceManager;
 import com.ivy.manager.TaskManager;
 import com.ivy.model.Task;
+import com.ivy.util.DateUtils;
 import com.ivy.util.Messages;
 import com.sun.istack.internal.Nullable;
 
@@ -33,8 +34,13 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
 
         view.showWelcomeMenu(taskManager.getCompletedTasks().size(), taskManager.getUncompletedTasks().size(), taskManager.getOverdueTasks().size());
 
-        //TODO daily agenda
-        //view.print("Today's ToDoLy: ");
+        List<Task> agenda = taskManager.getUncompletedTasks()
+                .stream()
+                .filter(task -> task.dueDate != null)
+                .filter(task -> DateUtils.isToday(task.dueDate))
+                .collect(Collectors.toList());
+        view.print(Messages.AGENDA);
+        printList(agenda);
 
         while (true) {
             view.showMainMenu();
@@ -241,10 +247,10 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         String taskToString;
         String project;
         String status;
-        project = (task.project.equals("")) ? ("not assigned") : task.project;
+        project = (("").equalsIgnoreCase(task.project)) ? "not assigned" : task.project;
         status = (task.isComplete) ? ("[\u2713]") : ("[\u2717]");
-        taskToString = (task.dueDate == null) ? ("Task: " + task.name + " " + status + "\nProject: " + project + "\n") :
-                ("Task: " + task.name + " " + status + "\nProject: " + project + "\nDue: " + dateFormat.format(task.dueDate) + "\n");
+        taskToString = (task.dueDate == null) ? (status + " " + task.name + "\nProject: " + project + "\n") :
+                (status + " " + task.name + "\nProject: " + project + "\nDue: " + dateFormat.format(task.dueDate) + "\n");
         return taskToString;
     }
 

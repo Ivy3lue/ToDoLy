@@ -31,6 +31,7 @@ public class MainView implements Mvp.View {
             System.out.println("OOPS! You have " + overdueTasks + " tasks overdue!");
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println();
     }
 
     /**
@@ -38,7 +39,6 @@ public class MainView implements Mvp.View {
      */
     @Override
     public void showMainMenu() {
-        System.out.println();
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Please select one of the following options: ");
         System.out.println("(1) to show your ToDoLy");

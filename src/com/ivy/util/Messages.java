@@ -13,6 +13,7 @@ public class Messages {
     public static final String DATE_ERROR = "Task saved without a due date. To add date please edit it in the *View Task* menu.";
     public static final String REMOVED = "Task(s) removed...";
     public static final String SAVING = "Saving...";
-    public static final String LIST_IS_EMPTY = "List is empty";
+    public static final String LIST_IS_EMPTY = "List is empty \n";
     public static final String ERROR_REMOVING = "No tasks to remove...";
+    public static final String AGENDA = "~~~~~~~~~~~~~~ Today's ToDoLy ~~~~~~~~~~~~~~";
 }
