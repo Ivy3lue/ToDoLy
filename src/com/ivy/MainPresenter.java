@@ -241,10 +241,10 @@ public class MainPresenter extends AbsBasePresenter<Mvp.View> implements Mvp.Pre
         String taskToString;
         String project;
         String status;
-        project = (task.project == null) ? ("not assigned") : task.project;
-        status = (task.isComplete) ? ("finished") : ("unfinished");
-        taskToString = (task.dueDate == null) ? ("Project: " + project + ", Task: " + task.name + ", " + status) :
-                ("Project: " + project + ", Task: " + task.name + ", due " + dateFormat.format(task.dueDate) + ", " + status);
+        project = (task.project.equals("")) ? ("not assigned") : task.project;
+        status = (task.isComplete) ? ("[\u2713]") : ("[\u2717]");
+        taskToString = (task.dueDate == null) ? ("Task: " + task.name + " " + status + "\nProject: " + project + "\n") :
+                ("Task: " + task.name + " " + status + "\nProject: " + project + "\nDue: " + dateFormat.format(task.dueDate) + "\n");
         return taskToString;
     }
 
